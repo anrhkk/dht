@@ -248,4 +248,4 @@ class Dht {
       
 }
 
-module.exports = Dht;
+(new Dht(config.port, config.address));

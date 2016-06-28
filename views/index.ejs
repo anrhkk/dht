@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel='stylesheet' href='/static/stylesheets/style.css'/>
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<h1 class="text-center"><a href="/">DHT搜索引擎</a></h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form method="get" class="form-group">
+                <input type="text" id="keyword" name="keyword" class="form-control" placeholder="请输入关键字，支持拼音">
+                <input type="hidden" name="page" value="<%= parseInt(page); %>">
+                <input type="hidden" id="sortBy" name="sortBy" value="<%= sortBy; %>">
+                <input type="hidden" id="sortType" name="sortType" value="<%= sortType; %>">
+            </form>
+        </div>
+    </div>
+    <table class="table table-bordered table-hover table-striped table-responsive">
+        <thead>
+        <tr>
+            <td>名称</td>
+            <td><a href="javascript:sort('type');">类型</a></td>
+            <td><a href="javascript:sort('size');">大小</a></td>
+            <td><a href="javascript:sort('hot');">热度</a></td>
+            <td>地址</td>
+            <td>时间</td>
+        </tr>
+        </thead>
+        <tbody>
+        <% list.data.forEach(function(item){ %>
+        <tr>
+            <td><%- item.name %></td>
+            <td><%= item.type; %></td>
+            <td><%= item.size; %></td>
+            <td><%= item.hot; %></td>
+            <td><a href="<%= item.magnet; %>"><%= item.magnet; %></a></td>
+            <td><%= item.created_at; %></td>
+        </tr>
+        <% });; %>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="6">
+                <nav>
+                    <ul class="pager">
+                        <li class="<% if(parseInt(page) <= 1){ %>disabled<% }; %>"><a
+                                    href="?page=<% if(parseInt(page) > 1){ %> <%= parseInt(page)-1 %> <% }; %>">上一页</a>
+                        </li>
+                        <li><a href="?page=<% if(parseInt(page) > 1){ %> <%= parseInt(page)+1 %> <% };else{ %>2<% } %>">下一页</a>
+                        </li>
+                        <li><%= list.currentPage %>/<%= list.totalPages; %>页</li>
+                        <li><%= list.count; %>条</li>
+                    </ul>
+                </nav>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $('#keyword').blur(function () {
+        $('form').submit();
+    });
+    function sort(sortBy) {
+        $('#sortBy').val(sortBy);
+        if ($('#sortType').val() == 'DESC') {
+            $('#sortType').val('ASC');
+        } else {
+            $('#sortType').val('DESC');
+        }
+        $('form').submit();
+    }
+</script>
+</body>
+</html>
